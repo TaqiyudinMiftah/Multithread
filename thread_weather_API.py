@@ -8,12 +8,14 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 from tqdm import tqdm
+from dotenv import load_dotenv
 
-# ================== KONFIGURASI ==================
+load_dotenv()
+
 API_URL = "http://api.weatherapi.com/v1/current.json"
-API_KEY = "b9a12af935d8444489240401251609"
+API_KEY = os.getenv("API_KEY")   # ✅ ambil dari .env
 
-INPUT_XLSX = r"C:\Adn\Adn Belajar python\kecamatan_jawa_timur_wilayahid.xlsx"      # ganti sesuai file kamu
+INPUT_XLSX = r"kecamatan_jawa_timur_wilayahid.xlsx"      # ganti sesuai file kamu
 SHEET_NAME = 0                                 # atau "Sheet1"
 KOLOM_KECAMATAN = "Kecamatan"                  # nama kolom di Excel
 OUTPUT_XLSX = "weather_kecamatan_jatim_threads.xlsx"
@@ -106,7 +108,6 @@ def fetch_one(kecamatan_name: str) -> dict:
 def main():
     # 1) Baca daftar kecamatan
     kecamatan_list = read_kecamatan(INPUT_XLSX, sheet=SHEET_NAME, kolom=KOLOM_KECAMATAN)
-    # opsional: unik + sort
     kecamatan_list = sorted(set(kecamatan_list))
 
     results = []
